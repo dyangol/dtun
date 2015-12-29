@@ -1,0 +1,75 @@
+#!/bin/sh
+
+[ -x /usr/bin/logger ] || exit 5
+[ -x /usr/bin/nslookup ] || exit 6
+
+. /lib/functions.sh
+. /lib/dtun/dtun.sh
+
+help()
+{
+	cat <<EOF
+Syntax: $INITPR [command]
+
+Available commans:
+	start		Load config
+	stop		Unload config
+EOF
+}
+
+ifup()
+{
+	local device enabled
+
+	config_load $DTUN_CONF
+
+	if [ -z "$1" ]; then
+		echo "Expecting interface. Usage: $INITPR ifup <interface>" && exit 0
+	fi
+
+	if [ -n "$2" ]; then
+		echo "Too many arguments. Usage: $INITPR ifup <interface>" && exit 0
+	fi
+
+	config_get enabled "$1" enabled 0
+
+	device=$(uci -p /var/state get network.$1.ifname) &> /dev/null
+
+	if [ -n "$device" ]; then
+		[ "$enabled" -eq 1 ] && ACTION=ifup INTERFACE=$1 DEVICE=$device /sbin/hotplug-call iface
+	fi
+	
+}
+
+start()
+{
+	config_load $DTUN_CONF
+	config_foreach ifup interface
+}
+
+
+stop()
+{
+	dtun_logger $INITPR notice "Stopping all tracker processes"
+
+	killall $TRACKER &> /dev/null
+	rm /var/run/$TRACKER-* &> /dev/null
+}
+
+restart()
+{
+	stop
+	start
+}
+
+case "$1" in
+	ifup|start|stop|restart)
+		$*
+	;;
+	*)
+		help
+	;;
+esac
+
+exit 0
+

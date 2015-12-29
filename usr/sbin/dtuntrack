@@ -1,0 +1,49 @@
+#!/bin/sh
+
+. /lib/functions.sh
+. /lib/dtun/dtun.sh
+
+[ -z "$3" ] && echo "Error: must not be started manually" && exit 0
+
+if [ -e /var/run/$TRACKER-$1.pid ] ; then
+	kill $(cat /var/run/$TRACKER-$1.pid) &> /dev/null
+	rm /var/run/$TRACKER-$1.pid &> /dev/null
+fi
+
+echo "$$" > /var/run/$TRACKER-$1.pid
+
+local peeraddr hostname_ip ret loop_on
+
+config_load network interface $1
+
+loop_on=true
+
+dtun_logger $TRACKER notice "Tracking tunnel $1 on remote hostname $2"
+
+while $loop_on; do
+
+	config_get peeraddr $1 peeraddr 0.0.0.0
+	hostname_ip=$(nslookup $2 | tail -1 | awk '{print $3}') 2> /dev/null
+
+	if [ -n "$hostname_ip" -a "$peeraddr" != "$hostname_ip" ]; then
+		
+		dtun_config_option_set network $1 peeraddr $hostname_ip
+		ret=$?
+
+		if [ $ret -ge 0 ]; then
+
+			/etc/init.d/network reload > /dev/null
+			dtun_logger $TRACKER notice "The address of tunnel $1 has been updated to $hostname_ip"
+		else
+			dtun_logger $TRACKER error "Unable to apply $1 tunnel configuration"
+			loop_on=false
+		fi
+
+#	else
+#		dtun_logger $TRACKER notice "Nothing to do: $peeraddr $hostname_ip"
+	fi
+
+	sleep $3
+done
+
+exit 1

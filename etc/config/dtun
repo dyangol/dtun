@@ -1,0 +1,9 @@
+config interface 'mygre'
+	option enabled '1'
+	option remote_host 'bcnagudells40.ignorelist.com'
+	option timeout '10'
+
+config interface 'mygre2'
+	option enabled '1'
+	option remote_host 'upc.edu'
+	option timeout '5'
