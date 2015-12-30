@@ -15,30 +15,30 @@ PKG_LICENSE:=GPLv2
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/dtun
+define Package/$(PKG_NAME)
    SECTION:=net
    CATEGORY:=Network
-   SUBMENU:=Routing and Redirection
-   DEPENDS:=+nslookup
+   SUBMENU:=IP Addresses and Names
+#   DEPENDS:=
    TITLE:=Remote IP address updater for GRE tunnels
-   MAINTAINER:=Victor Oncins <victor.oncins@gmail.com>
+   MAINTAINER:=$(PKG_MAINTAINER)
    PKGARCH:=all
 endef
 
-define Package/dtun/description
+define Package/$(PKG_NAME)/description
 dtun updates the remote IP address of any GRE tunels based on a hostname. 
 It is based on hotplug scripts. The tunnels must be previously created with UCI.
 endef
 
-define Package/dtun/conffiles
-/etc/config/dtun
+define Package/$(PKG_NAME)/conffiles
+/etc/config/$(PKG_NAME)
 endef
 
 define Build/Compile
 endef
 
-define Package/dtun/install
+define Package/$(PKG_NAME)/install
 $(CP) ./files/* $(1)
 endef
 
-$(eval $(call BuildPackage,dtun))
+$(eval $(call BuildPackage,$(PKG_NAME)))
