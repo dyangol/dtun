@@ -12,8 +12,9 @@ help()
 Syntax: $INITPR [command]
 
 Available commans:
-	start		Load config
-	stop		Unload config
+	start		Load config and start hotplug scripts and trackers
+	stop		Kill all tracker processes
+	restart		Stop and start
 EOF
 }
 
