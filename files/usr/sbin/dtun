@@ -1,7 +1,6 @@
 #!/bin/sh
 
 [ -x /usr/bin/logger ] || exit 5
-[ -x /usr/bin/nslookup ] || exit 6
 
 . /lib/functions.sh
 . /lib/dtun/dtun.sh

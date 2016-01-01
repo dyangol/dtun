@@ -19,7 +19,7 @@ define Package/$(PKG_NAME)
    SECTION:=net
    CATEGORY:=Network
    SUBMENU:=IP Addresses and Names
-#   DEPENDS:=
+   DEPENDS:=+kmod-gre +gre
    TITLE:=Remote IP address updater for GRE tunnels
    MAINTAINER:=$(PKG_MAINTAINER)
    PKGARCH:=all

@@ -1,25 +1,26 @@
 #!/bin/sh
 
+[ -x /usr/bin/logger ] || exit 1
+[ -x /usr/bin/nslookup ] || exit 2
+
 . /lib/functions.sh
-. /lib/functions/network.sh
 . /lib/dtun/dtun.sh
 
 config_load $DTUN_CONF
 
 config_get enabled $INTERFACE enabled 0
+
 [ "$enabled" == "1" ] || exit 0
 
 [ "$ACTION" == "ifup" -o "$ACTION" == "ifdown" ] || exit 1
+
 [ -n "$INTERFACE" ] || exit 2
 
 if [ "$ACTION" == "ifup" ]; then
         [ -n "$DEVICE" ] || exit 3
 fi
 
-[ -x /usr/bin/logger ] || exit 4
-
 dtun_logger $HOTSCR notice "$ACTION interface $INTERFACE (${DEVICE:-unknown})"
-
 
 case "$ACTION" in
 	ifup)
