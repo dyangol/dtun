@@ -25,7 +25,7 @@ dtun_runtrack()
 	protocol=$(uci -p /var/state get network.$1.proto) &> /dev/null
 
 	if [ "$protocol" != "gre" ] && [ "$protocol" != "gretap" ]; then
-		dtun_logger "lib-$INITPR" error "The device protocol of $1 must be gre or gretap"
+		dtun_logger "lib-$INITPR" error "The protocol of $1 must be gre or gretap"
 		return 0
 	fi	
 

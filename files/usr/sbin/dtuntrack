@@ -39,8 +39,6 @@ while $loop_on; do
 			loop_on=false
 		fi
 
-#	else
-#		dtun_logger $TRACKER notice "Nothing to do: $peeraddr $hostname_ip"
 	fi
 
 	sleep $3
