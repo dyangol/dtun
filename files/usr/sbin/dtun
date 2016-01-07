@@ -19,7 +19,7 @@ EOF
 
 ifup()
 {
-	local device enabled
+	local device protocol enabled
 
 	config_load $DTUN_CONF
 
@@ -33,10 +33,15 @@ ifup()
 
 	config_get enabled "$1" enabled 0
 
-	device=$(uci -p /var/state get network.$1.ifname) &> /dev/null
+	if [ "$enabled" -eq 1 ]; then
+		protocol=$(uci -p /var/state get network.$1.proto) &> /dev/null
 
-	if [ -n "$device" ]; then
-		[ "$enabled" -eq 1 ] && ACTION=ifup INTERFACE=$1 DEVICE=$device /sbin/hotplug-call iface
+		if [ "$protocol" != "gre" ] && [ "$protocol" != "gretap" ]; then
+			echo "The device protocol of $1 must be gre or gretap readed proto=$protocol" && return 0
+		fi
+
+		device=$(uci -p /var/state get network.$1.ifname) &> /dev/null
+		[ -n "$device" ] && ACTION=ifup INTERFACE=$1 DEVICE=$device /sbin/hotplug-call iface
 	fi
 	
 }

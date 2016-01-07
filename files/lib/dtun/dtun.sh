@@ -20,7 +20,14 @@ dtun_logger()
 dtun_runtrack()
 {
 
-	local timeout remote_host
+	local protocol timeout remote_host
+	
+	protocol=$(uci -p /var/state get network.$1.proto) &> /dev/null
+
+	if [ "$protocol" != "gre" ] && [ "$protocol" != "gretap" ]; then
+		dtun_logger "lib-$INITPR" error "The device protocol of $1 must be gre or gretap"
+		return 0
+	fi	
 
 	config_get timeout $1 timeout $MINTIMEOUT
 	config_get remote_host $1 remote_host localhost
