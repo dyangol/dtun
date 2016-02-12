@@ -20,15 +20,15 @@ if [ "$ACTION" == "ifup" ]; then
         [ -n "$DEVICE" ] || exit 3
 fi
 
-dtun_logger $HOTSCR notice "$ACTION interface $INTERFACE (${DEVICE:-unknown})"
+#dtun_logger $HOTSCR notice "$ACTION interface $INTERFACE (${DEVICE:-unknown})"
 
 case "$ACTION" in
 	ifup)
-		dtun_logger $HOTSCR notice "Running $TRACKER on $INTERFACE ($DEVICE)"
+		#dtun_logger $HOTSCR notice "Running $TRACKER on $INTERFACE ($DEVICE)"
 		dtun_runtrack $INTERFACE
 	;;
 	ifdown)
-		dtun_logger $HOTSCR notice "Stopping $TRACKER on $INTERFACE"
+		#dtun_logger $HOTSCR notice "Stopping $TRACKER on $INTERFACE"
 		dtun_stoptrack $INTERFACE 
 esac
 

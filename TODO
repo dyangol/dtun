@@ -1,3 +1,5 @@
 TODO
 
 - Add IPv6 support
+- Add support to invalid DNS request (i.e. wrong hostname or other abnormal cases)
+- Selection of specific DNS to request the address of a remote hostname. By default dtun uses the system DNS.

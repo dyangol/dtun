@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dtun
-PKG_VERSION:=1.1
+PKG_VERSION:=1.2
 PKG_RELEASE:=1
 PKG_MAINTAINER:=Victor Oncins <victor.oncins@gmail.com>
 PKG_LICENSE:=GPLv2
@@ -19,14 +19,14 @@ define Package/$(PKG_NAME)
    SECTION:=net
    CATEGORY:=Network
    SUBMENU:=IP Addresses and Names
-   DEPENDS:=+kmod-gre +gre
-   TITLE:=Remote IP address updater for GRE tunnels
+   DEPENDS:=+kmod-gre +gre +kmod-ipip +ipip
+   TITLE:=Remote IP address updater for GRE and IPIP tunnels
    MAINTAINER:=$(PKG_MAINTAINER)
    PKGARCH:=all
 endef
 
 define Package/$(PKG_NAME)/description
-dtun updates the remote IP address of any GRE tunels based on a hostname. 
+dtun updates the remote IP address of any GRE and IPIP tunels based on a hostname. 
 It is based on hotplug scripts. The tunnels must be previously created with UCI.
 endef
 

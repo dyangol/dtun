@@ -36,8 +36,8 @@ ifup()
 	if [ "$enabled" -eq 1 ]; then
 		protocol=$(uci -p /var/state get network.$1.proto) &> /dev/null
 
-		if [ "$protocol" != "gre" ] && [ "$protocol" != "gretap" ]; then
-			echo "The device protocol of $1 must be gre or gretap" && return 0
+		if [ "$protocol" != "gre" ] && [ "$protocol" != "gretap" ] && [ "$protocol" != "ipip" ]; then
+			echo "The device protocol of $1 must be IPIP or GRE" && return 0
 		fi
 
 		device=$(uci -p /var/state get network.$1.ifname) &> /dev/null
