@@ -3,7 +3,7 @@
 . /lib/functions.sh
 . /lib/dtun/dtun.sh
 
-[ -z "$3" ] && echo "Error: must not be started manually" && exit 0
+[ -z "$4" ] && echo "Error: must not be started manually" && exit 0
 
 if [ -e /var/run/$TRACKER-$1.pid ] ; then
 	kill $(cat /var/run/$TRACKER-$1.pid) &> /dev/null
@@ -12,7 +12,7 @@ fi
 
 echo "$$" > /var/run/$TRACKER-$1.pid
 
-local peeraddr hostname_ip dns ret loop_on
+local peeraddr hostname_ip ret loop_on
 
 config_load network interface $1
 
@@ -23,9 +23,8 @@ dtun_logger $TRACKER notice "Tracking tunnel $1 on remote hostname $2"
 while $loop_on; do
 
 	config_get peeraddr $1 peeraddr 0.0.0.0
-	config_get dns $1 dns ""
 
-	hostname_ip=$(nslookup $2 $dns | tail -1 | awk '{print $3}') 2> /dev/null
+	hostname_ip=$(nslookup $2 $4 | tail -1 | awk '{print $3}') 2> /dev/null
 
 	if [ -n "$hostname_ip" -a "$peeraddr" != "$hostname_ip" ]; then
 		

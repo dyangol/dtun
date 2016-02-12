@@ -20,24 +20,20 @@ dtun_logger()
 dtun_runtrack()
 {
 
-	local protocol timeout remote_host
+	local protocol timeout remote_host dns
 	
 	protocol=$(uci -p /var/state get network.$1.proto) &> /dev/null
 
-	if [ "$protocol" != "gre" ] && [ "$protocol" != "gretap" ] && [ "$protocol" != "ipip"]; then
+	if [ "$protocol" != "gre" ] && [ "$protocol" != "gretap" ] && [ "$protocol" != "ipip" ]; then
 		dtun_logger "lib-$INITPR" error "The protocol of $1 must be IPIP or GRE"
 		return 0
 	fi	
 
 	config_get timeout $1 timeout $MINTIMEOUT
 	config_get remote_host $1 remote_host localhost
+	config_get dns $1 dns ""
 
-#	if [ -e /var/run/$TRACKER-$1.pid ]; then
-#		kill $(cat /var/run/$TRACKER-$1.pid) &> /dev/null
-#		rm /var/run/$TRACKER-$1.pid &> /dev/null
-#	fi
-
-	[ -x /usr/sbin/$TRACKER ] && /usr/sbin/$TRACKER $1 $remote_host $timeout &
+	[ -x /usr/sbin/$TRACKER ] && /usr/sbin/$TRACKER $1 $remote_host $timeout $dns &
 }
 
 dtun_stoptrack()
