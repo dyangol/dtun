@@ -1,5 +1,5 @@
 config interface 'mygre'
-	option enabled '1'
+	option enabled '0'
 	option remote_host 'remoteip.domain.net'
 	option timeout '60'
 	option dns '8.8.8.8'
